@@ -3,11 +3,14 @@
 namespace Parezban\BladeRouter;
 
 use Parezban\BladeRouter\Exceptions\BadMethodNameException;
+use Parezban\BladeRouter\Exceptions\MethodNotAllowedException;
 
 class Router
 {
 
     private $methods = [];
+
+    private $route = '';
 
     private const ALLOWED_METHODS = [
         'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'
@@ -23,12 +26,13 @@ class Router
     public function add(array $methods, string $route, $cb)
     {
         $this->methods = $methods;
+        $this->route = $route;
 
-        $this->checkMethod();
-        $this->match($route, $cb);
+        $this->checkMethodName();
+        $this->match($cb);
     }
 
-    private function checkMethod()
+    private function checkMethodName()
     {
         foreach ($this->methods as $method)
             if (!in_array($method, self::ALLOWED_METHODS))
@@ -37,16 +41,40 @@ class Router
         return true;
     }
 
-    private function match($route, $cb)
+    private function isMethodsAllowed()
     {
+        if (in_array($_SERVER['REQUEST_METHOD'], $this->methods))
+            return true;
 
-        $requestMethod = $_SERVER['REQUEST_METHOD'];
-        $requestUri = $_SERVER['REQUEST_URI'];
-        if ($route) {
+        throw new MethodNotAllowedException(sprintf('Method not allowed, avalable methods are %s', implode(' - ', $this->methods)));
+    }
+
+    private function match($cb)
+    {
+        if ($this->checkAddress() && $this->isMethodsAllowed()) {
             $cb();
         }
 
         return false;
+    }
+
+    private function checkAddress()
+    {
+        if ($this->route == $this->getRealAddress()) {
+        }
+
+        return true;
+    }
+
+
+    private function getRealAddress()
+    {
+        $root = $this->getRoot();
+        $fullAddress =  $_SERVER['REQUEST_URI'];
+
+        $fullAddress = ltrim($fullAddress, $root);
+
+        return '/' . $fullAddress;
     }
 
     private function getRoot()

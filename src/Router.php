@@ -2,7 +2,7 @@
 
 namespace Parezban\BladeRouter;
 
-use Parezban\BladeRouter\Exceptions\BadMethodName;
+use Parezban\BladeRouter\Exceptions\BadMethodNameException;
 
 class Router
 {
@@ -32,7 +32,7 @@ class Router
     {
         foreach ($this->methods as $method)
             if (!in_array($method, self::ALLOWED_METHODS))
-                throw new BadMethodName();
+                throw new BadMethodNameException(sprintf('Method not found, avalable methods are %s', implode(' - ', self::ALLOWED_METHODS)));
 
         return true;
     }

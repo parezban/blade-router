@@ -4,7 +4,7 @@ namespace Parezban\BladeRouter\Exceptions;
 
 use Exception;
 
-class BadMethodName extends Exception
+class BadMethodNameException extends Exception
 {
     public function __construct($message, Exception $previous = null)
     {

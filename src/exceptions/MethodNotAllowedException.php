@@ -4,10 +4,10 @@ namespace Parezban\BladeRouter\Exceptions;
 
 use Exception;
 
-class BadMethodName extends Exception
+class MethodNotAllowedException extends Exception
 {
     public function __construct($message, Exception $previous = null)
     {
-        parent::__construct($message, 500, $previous);
+        parent::__construct($message, 405, $previous);
     }
 }

@@ -60,10 +60,12 @@ class Router
 
     private function checkAddress()
     {
-        if ($this->route == $this->getRealAddress()) {
-        }
+        $escapedUrl = str_replace('/', '\/', $this->route);
 
-        return true;
+        if (preg_match('/^' . $escapedUrl . '$/', $this->getRealAddress()))
+            return true;
+
+        return false;
     }
 
 

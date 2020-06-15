@@ -62,12 +62,22 @@ class Router
 
     private function checkAddress()
     {
-        $escapedUrl = str_replace('/', '\/', $this->route);
         preg_match_all(self::REG_FOR_KNOWN_TYPES_PARAMS, $this->route, $knownTypesParams);
         preg_match_all(self::REG_FOR_UNKNOWN_TYPES_PARAMS, $this->route, $unknownTypesParams);
-        echo '<pre>';
-        print_r($knownTypesParams);
-        print_r($unknownTypesParams);
+        $temp =  $this->route;
+        if (isset($knownTypesParams[1]))
+            foreach ($knownTypesParams[1] as $param) {
+                $this->route = str_replace($param, '', $this->route);
+            }
+
+        if (isset($unknownTypesParams[1]))
+            foreach ($unknownTypesParams[1] as $param) {
+                $this->route = str_replace($param, '(.*)', $this->route);
+            }
+
+
+        $escapedUrl = str_replace('/', '\/', $this->route);
+
         if (preg_match('/^' . $escapedUrl . '$/', $this->getRealAddress()))
             return true;
 

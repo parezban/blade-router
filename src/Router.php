@@ -8,6 +8,7 @@ use Parezban\BladeRouter\Exceptions\MethodNotAllowedException;
 class Router
 {
 
+
     private $methods = [];
 
     private $route = '';
@@ -15,6 +16,9 @@ class Router
     private const ALLOWED_METHODS = [
         'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'
     ];
+
+    const REG_FOR_KNOWN_TYPES_PARAMS   = '/(:[a-z0-9\_]+)\(\.+\)/';
+    const REG_FOR_UNKNOWN_TYPES_PARAMS = '/(:[a-z0-9\_]+)/';
 
     private $root = null;
 
@@ -61,6 +65,17 @@ class Router
     private function checkAddress()
     {
         $escapedUrl = str_replace('/', '\/', $this->route);
+
+        echo 'escapedUrl   => '. $escapedUrl ;
+        echo 'getRealAddress   => '. $this->getRealAddress();
+        preg_match(self::REG_FOR_KNOWN_TYPES_PARAMS, $escapedUrl, $knownTypesParams);
+        preg_match(self::REG_FOR_UNKNOWN_TYPES_PARAMS, $escapedUrl, $unknownTypesParams);
+
+        // Print the entire match result
+        print_r($knownTypesParams);
+        print_r($unknownTypesParams);
+        echo '=====================   => ';
+
 
         if (preg_match('/^' . $escapedUrl . '$/', $this->getRealAddress()))
             return true;

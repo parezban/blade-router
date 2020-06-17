@@ -12,6 +12,8 @@ class Router
 
     private $route = '';
 
+    private $params = [];
+
     private const ALLOWED_METHODS = [
         'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'
     ];
@@ -20,15 +22,12 @@ class Router
 
     private $root = null;
 
-    public function __construct($root = null)
-    {
-        $this->root = $root;
-    }
 
     public function add(array $methods, string $route, $cb)
     {
         $this->methods = $methods;
         $this->route = $route;
+        $this->params = [];
 
         $this->checkMethodName();
         $this->match($cb);
@@ -54,27 +53,36 @@ class Router
     private function match($cb)
     {
         if ($this->checkAddress() && $this->isMethodsAllowed()) {
+    
             $cb();
         }
 
         return false;
     }
 
-    private function checkAddress()
+    private function purifyAndCollectUrlParams()
     {
+
         preg_match_all(self::REG_FOR_KNOWN_TYPES_PARAMS, $this->route, $knownTypesParams);
         preg_match_all(self::REG_FOR_UNKNOWN_TYPES_PARAMS, $this->route, $unknownTypesParams);
-        $temp =  $this->route;
         if (isset($knownTypesParams[1]))
             foreach ($knownTypesParams[1] as $param) {
                 $this->route = str_replace($param, '', $this->route);
+                $this->params[]=$param;
             }
 
         if (isset($unknownTypesParams[1]))
             foreach ($unknownTypesParams[1] as $param) {
                 $this->route = str_replace($param, '(.*)', $this->route);
+                $this->params[]=$param;
             }
+ 
+    }
 
+    private function checkAddress()
+    {
+
+        $this->purifyAndCollectUrlParams();
 
         $escapedUrl = str_replace('/', '\/', $this->route);
 

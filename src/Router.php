@@ -18,7 +18,7 @@ class Router
         'GET', 'POST', 'PUT', 'DELETE', 'OPTIONS', 'PATCH', 'HEAD'
     ];
     const REG_FOR_KNOWN_TYPES_PARAMS   = '/(\{[a-z\_]+[a-z\_0-9]*\})\(/';
-    const REG_FOR_UNKNOWN_TYPES_PARAMS = '/(\{[a-z\_]+[a-z\_0-9]*\})\//';
+    const REG_FOR_UNKNOWN_TYPES_PARAMS = '/(\{[a-z\_]+[a-z\_0-9]*\})(\/|$)/';
 
     private $root = null;
 
@@ -54,7 +54,7 @@ class Router
     {
         if ($this->checkAddress() && $this->isMethodsAllowed()) {
             $params = $this->getUrlParamsValue();
-
+            print_r($params);
             $cb();
         }
 

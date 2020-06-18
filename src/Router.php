@@ -53,9 +53,7 @@ class Router
     private function match($cb)
     {
         if ($this->checkAddress() && $this->isMethodsAllowed()) {
-            $params = $this->getUrlParamsValue();
-      
-            $cb();
+            call_user_func_array($cb, $this->getUrlParamsValue());
         }
 
         return false;

@@ -54,7 +54,7 @@ class Router
     {
         if ($this->checkAddress() && $this->isMethodsAllowed()) {
             $params = $this->getUrlParamsValue();
-            print_r($params);
+      
             $cb();
         }
 
@@ -71,11 +71,12 @@ class Router
         foreach ($this->params as  $param) {
             foreach ($routeArray as $indexRouteArray => $routePattern) {
                 if (strpos($routePattern, $param) !== false) {
-                    $paramsValues[] = $currentAddress[$indexRouteArray];
+                    $paramsValues[$indexRouteArray] = $currentAddress[$indexRouteArray];
                     break;
                 }
             }
         }
+        rsort($paramsValues);
 
         return $paramsValues;
     }

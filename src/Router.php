@@ -35,6 +35,11 @@ class Router
         $this->match($cb);
     }
 
+    public function found(): bool
+    {
+        return $this->found;
+    }
+
     private function checkMethodName()
     {
         foreach ($this->methods as $method)

@@ -12,6 +12,8 @@ class Router
 
     private $route = '';
 
+    private $found = false;
+
     private $params = [];
 
     private const ALLOWED_METHODS = [
@@ -53,6 +55,7 @@ class Router
     private function match($cb)
     {
         if ($this->checkAddress() && $this->isMethodsAllowed()) {
+            $this->found = true;
             call_user_func_array($cb, $this->getUrlParamsValue());
         }
 

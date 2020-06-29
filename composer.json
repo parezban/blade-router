@@ -14,5 +14,8 @@
             "email": "parezban@gmail.com"
         }
     ],
-    "require": {}
+    "require": {},
+    "require-dev": {
+        "phpunit/phpunit": "^8"
+    }
 }

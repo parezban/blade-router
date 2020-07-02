@@ -51,10 +51,9 @@ class Router
 
     private function isMethodsAllowed()
     {
-        if (in_array($_SERVER['REQUEST_METHOD'], $this->methods))
+        if (in_array(isset($_SERVER['REQUEST_METHOD']) ? $_SERVER['REQUEST_METHOD'] : 'GET', $this->methods))
             return true;
-
-        throw new MethodNotAllowedException(sprintf('Method not allowed, avalable methods are %s', implode(' - ', $this->methods)));
+        return false;
     }
 
     private function match($cb)

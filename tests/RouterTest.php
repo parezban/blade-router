@@ -4,6 +4,11 @@ use PHPUnit\Framework\TestCase;
 
 class Routertest extends TestCase
 {
+    public function testClass()
+    {
+        $this->assertInstanceOf('\Parezban\BladeRouter\Router', new Parezban\BladeRouter\Router());
+    }
+
     public function testMethods()
     {
         $router = new \Parezban\BladeRouter\Router();

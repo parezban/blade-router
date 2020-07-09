@@ -9,6 +9,24 @@ class Routertest extends TestCase
         $this->assertInstanceOf('\Parezban\BladeRouter\Router', new Parezban\BladeRouter\Router());
     }
 
+
+    public function testStaticRoute()
+    {
+        $router = new \Parezban\BladeRouter\Router();
+        ob_start();
+
+
+        $_SERVER['REQUEST_URI'] = '/xxx/mixxx';
+
+        $router->add(['GET'], '/xxx/mixxx', function ()  {
+            echo 'xxx';
+        });
+
+        $this->assertEquals('xxx', ob_get_contents());
+        ob_clean();
+        ob_end_clean();
+
+    }
     public function testMethods()
     {
         $router = new \Parezban\BladeRouter\Router();
